@@ -1,5 +1,5 @@
 upstream app {
-	<% @app_nodes.split(',').each do |node| %>
+    <% @app_nodes.split(',').each do |node| %>
     server <%= node %>:8484;
     <% end %>
 }

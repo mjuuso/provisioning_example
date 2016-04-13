@@ -14,6 +14,6 @@ template '/etc/nginx/sites-available/default' do
   })
 end
 
-service "nginx" do
+service 'nginx' do
   action :restart
 end

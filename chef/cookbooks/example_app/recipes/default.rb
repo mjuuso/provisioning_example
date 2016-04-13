@@ -1,12 +1,5 @@
-group 'deploy' do
-  action :create
-  gid 1101
-end
-
 user 'deploy' do
   comment 'Deploy user'
-  uid 1101
-  gid 1101
   home '/app'
   shell '/bin/bash'
   password ''
@@ -35,6 +28,6 @@ cookbook_file '/etc/init/app.conf' do
   action :create
 end
 
-service "app" do
+service 'app' do
   action :start
 end

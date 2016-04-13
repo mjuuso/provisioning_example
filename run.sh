@@ -23,10 +23,12 @@ fi
 MANAGEMENT_IP=$(curl -s http://ipinfo.io/ip)
 [[ ! "$MANAGEMENT_IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]] && echo "Couldn't determine your external IP: $MANAGEMENT_IP" && exit 1
 
+# Run terraform to create the resources
 terraform apply -var 'aws_access_key='"$1"'' -var 'aws_secret_key='"$2"'' -var "management_ip=$MANAGEMENT_IP"
 
 # Verify that the load balancer works as expected
 echo "Provisioning complete:"
 curl -s $(terraform output lb-ip)
-echo ""
+echo
 curl -s $(terraform output lb-ip)
+echo
