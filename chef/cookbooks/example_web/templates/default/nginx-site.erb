@@ -1,0 +1,13 @@
+upstream app {
+	<% @app_nodes.split(',').each do |node| %>
+    server <%= node %>:8484;
+    <% end %>
+}
+
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://app;
+    }
+}
