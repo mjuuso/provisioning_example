@@ -1,3 +1,4 @@
+# We'll run our app under a non-privileged user
 user 'deploy' do
   comment 'Deploy user'
   home '/app'
@@ -5,6 +6,7 @@ user 'deploy' do
   password ''
 end
 
+# Our app lives in /app
 directory '/app' do
   owner 'deploy'
   group 'deploy'
@@ -12,6 +14,7 @@ directory '/app' do
   action :create
 end
 
+# Copy the pre-compiled application to the directory
 cookbook_file '/app/app' do
   source 'app-linux-amd64'
   owner 'deploy'
@@ -20,6 +23,7 @@ cookbook_file '/app/app' do
   action :create
 end
 
+# Copy the upstart job script
 cookbook_file '/etc/init/app.conf' do
   source 'init-app.conf'
   owner 'root'
@@ -28,6 +32,7 @@ cookbook_file '/etc/init/app.conf' do
   action :create
 end
 
+# Start the upstart job, ie. service
 service 'app' do
   action :start
 end

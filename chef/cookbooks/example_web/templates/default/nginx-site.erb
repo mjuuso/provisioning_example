@@ -1,9 +1,11 @@
+# We define our app nodes in the upstream block
 upstream app {
     <% @app_nodes.split(',').each do |node| %>
     server <%= node %>:8484;
     <% end %>
 }
 
+# Simple server definition passing everything to our app nodes
 server {
     listen 80;
 

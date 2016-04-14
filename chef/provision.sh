@@ -13,6 +13,6 @@ if [[ "$1" == "app" ]]; then
 
 elif [[ "$1" == "lb" ]]; then
 	echo "Provisioning a load balancer node, app nodes: $APP_NODES"
-	# we need -E to pass the environment to chef-solo; namely APP_NODES
+	# we need -E to pass the environment to chef-solo; namely $APP_NODES
 	sudo -E chef-solo -c chef/solo.rb -o example_web
 fi

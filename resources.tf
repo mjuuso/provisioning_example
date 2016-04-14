@@ -1,5 +1,5 @@
 /* First we'll set some variables for AWS authentication, and
-   to help us with configuring multiple instances in different
+   to help us configure multiple instances in different
    availability zones. */
 
 variable "aws_access_key" {
@@ -64,8 +64,9 @@ resource "aws_subnet" "provisioning_example" {
     count = 2
     
     /* We could have our app instances in private IP addresses, but that would mean
-       we'd need a NAT for them to access the Internet (for provisioning). For simplicity,
-       every instance is set to have a public IP. */
+       we'd need a NAT for them to access the Internet (for provisioning). We'd also need
+       to use a bastion host for the SSH provisioner. For simplicity, every instance is
+       set to have a public IP. */
 
     map_public_ip_on_launch = true 
 }
@@ -166,12 +167,14 @@ resource "aws_key_pair" "root" {
 
 resource "aws_instance" "provisioning_example-lb" {
     ami = "ami-f95ef58a"
-    instance_type = "t2.micro" // a t2.micro will do fine
+    instance_type = "t2.micro"
     tags {
         Name = "node-lb"
     }
 
-    subnet_id = "${element(aws_subnet.provisioning_example.*.id, count.index)}"
+    /* We'll place the load balancer in the first subnet, ie. eu-west-1a. */
+    subnet_id = "${aws_subnet.provisioning_example.0.id}"
+    
     associate_public_ip_address = true
 
     key_name = "${aws_key_pair.root.key_name}"
